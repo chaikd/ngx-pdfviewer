@@ -1,0 +1,9 @@
+
+<!-- <ng-container [ngTemplateOutlet]="fillTpl"></ng-container> -->
+<ng-content></ng-content>
+
+<ng-container *ngIf="showViewer">
+    <lib-pdf-viewer [url]="url" [isFullScreen]="!!fillTpl"></lib-pdf-viewer>
+</ng-container>
+
+

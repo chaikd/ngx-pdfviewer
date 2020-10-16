@@ -1,0 +1,30 @@
+<div class="action px-6" [ngClass]="{'text-white': isFullScreen,'bg-black': isFullScreen,'border': !isFullScreen}">
+    <span class="filename float-left">{{fileName}}</span>
+    <div class="btns float-right text-s">
+        <i class="iconfont icon-left mr-6" (click)="previous()"></i>
+        <i class="iconfont icon-right mr-6" (click)="next()"></i>
+        <div class="page-input">
+            <input type="text" [(ngModel)]="currentPage" (change)="pageChange()"
+                 style="margin-right:.25rem;">/
+            <span style="margin-left: .25rem;">{{pdfViewer?.pagesCount || 0}}</span>
+        </div>
+        <div class="line"></div>
+        <i class="iconfont icon-fangda-copy mr-6" (click)="zoomIn()"></i>
+        <i class="iconfont icon-suoxiao mr-6" (click)="zoomOut()"></i>
+        <i *ngIf="isFullScreen" class="iconfont icon-close  mr-6" (click)="close()"></i>
+        <i class="iconfont icon-fullscreen" *ngIf="!isFullScreen" (click)="isFullScreen=!isFullScreen"></i>
+        <i class="iconfont icon-exit-fullscreen" *ngIf="isFullScreen" (click)="isFullScreen=!isFullScreen"></i>
+    </div>
+</div>
+
+<div class="full-box" [ngClass]="{'full-box': isFullScreen}">
+    <ng-container [ngTemplateOutlet]="viewerTpl"></ng-container>
+</div>
+
+
+<ng-template #viewerTpl>
+    <div id="viewerContainer">
+        <div id="viewer" class="pdfviewer"></div>
+    </div>
+</ng-template>
+

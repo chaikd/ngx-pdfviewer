@@ -1,0 +1,58 @@
+{
+  "id": "2134385",
+  "name": "pdf-view",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "924380",
+      "name": "full-screen",
+      "font_class": "fullscreen",
+      "unicode": "e8e0",
+      "unicode_decimal": 59616
+    },
+    {
+      "icon_id": "5127312",
+      "name": "exit-fullscreen",
+      "font_class": "exit-fullscreen",
+      "unicode": "e785",
+      "unicode_decimal": 59269
+    },
+    {
+      "icon_id": "3546178",
+      "name": "缩小",
+      "font_class": "suoxiao",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "8827173",
+      "name": "right",
+      "font_class": "right",
+      "unicode": "e93e",
+      "unicode_decimal": 59710
+    },
+    {
+      "icon_id": "8827245",
+      "name": "left",
+      "font_class": "left",
+      "unicode": "e943",
+      "unicode_decimal": 59715
+    },
+    {
+      "icon_id": "10294676",
+      "name": "close",
+      "font_class": "close",
+      "unicode": "e605",
+      "unicode_decimal": 58885
+    },
+    {
+      "icon_id": "10515484",
+      "name": "放大",
+      "font_class": "fangda-copy",
+      "unicode": "e648",
+      "unicode_decimal": 58952
+    }
+  ]
+}

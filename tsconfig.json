@@ -17,7 +17,21 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "prize-wheel": [
+        "dist/prize-wheel"
+      ],
+      "prize-wheel/*": [
+        "dist/prize-wheel/*"
+      ],
+      "pdf-view": [
+        "dist/pdf-view"
+      ],
+      "pdf-view/*": [
+        "dist/pdf-view/*"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
