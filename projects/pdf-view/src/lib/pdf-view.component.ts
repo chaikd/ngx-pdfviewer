@@ -1,6 +1,7 @@
 import { AfterContentInit, AfterViewInit, Component, ContentChild, ContentChildren, ElementRef, Input, OnInit, QueryList, TemplateRef, ViewChild } from '@angular/core';
 import { PDFSource } from 'pdfjs-dist';
 import { fromEvent, Observable } from 'rxjs';
+import { PdfViewerComponent } from './pdf-viewer/pdf-viewer.component';
 
 @Component({
   selector: 'lib-pdf-view',
@@ -14,7 +15,8 @@ export class PdfViewComponent implements OnInit, AfterContentInit, AfterViewInit
   childEvent: Observable<any>;
 
   @Input() url: string | PDFSource | ArrayBuffer;
-  @Input() showViewer = false;
+  @Input() showViewer: boolean;
+  // @ViewChild('pdfViewer', {static: true}) pdfViewer: PdfViewerComponent;
 
   @ContentChild('fillTpl', {static: true}) fillTpl: ElementRef;
 
@@ -25,18 +27,19 @@ export class PdfViewComponent implements OnInit, AfterContentInit, AfterViewInit
 
   ngAfterViewInit() {
     console.log(this.fillTpl);
-    this.childEvent = fromEvent(this.fillTpl.nativeElement, 'click');
-    this.childEvent.subscribe(res => {
+    if (this.fillTpl) {
+      this.childEvent = fromEvent(this.fillTpl.nativeElement, 'click');
+      this.childEvent.subscribe(res => {
+        this.showViewer = true;
+      });
+    } else {
       this.showViewer = true;
-      console.log(111);
-    });
+    }
   }
 
   ngAfterContentInit() {
   }
 
 
-  showPdfviewer() {
-
-  }
+  showPdfviewer() {}
 }

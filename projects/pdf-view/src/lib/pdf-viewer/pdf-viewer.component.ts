@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2 } from '@angular/core';
 import { PDFDocumentProxy, PDFSource } from 'pdfjs-dist';
 import * as PDFJS from 'pdfjs-dist';
 import {
@@ -19,9 +19,12 @@ import {
 export class PdfViewerComponent implements OnInit, AfterViewInit {
 
   @Input() url: string | PDFSource | ArrayBuffer;
-  @Input() fileName: string;
-  @Input() isFullScreen: boolean;
+  @Input() fileName = 'PDF文件';
+  @Input() defaultDisplay: boolean;
 
+  @Output() destroy: EventEmitter<any> = new EventEmitter();
+
+  isFullScreen: boolean;
   viewContainer: ElementRef;
   pdf: PDFDocumentProxy;
   pdfLoadingTask: PDFLoadingTask;
@@ -33,9 +36,10 @@ export class PdfViewerComponent implements OnInit, AfterViewInit {
   l10n: NullL10n;
 
   USE_ONLY_CSS_ZOOM = true;
-  TEXT_LAYER_MODE = 0; // DISABLE
+  TEXT_LAYER_MODE = 1; // DISABLE
   MAX_IMAGE_SIZE = 1024 * 1024;
   CMAP_PACKED = true;
+  CMAP_URL = `https://unpkg.com/pdfjs-dist@${(PDFJS as any).version}/cmaps/`;
 
   DEFAULT_URL = '//raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/examples/learning/helloworld.pdf';
   DEFAULT_SCALE_DELTA = 1.1;
@@ -71,7 +75,7 @@ export class PdfViewerComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit() {
-    console.log(this.url);
+    // console.log(this.url);
     PDFJS.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${(PDFJS as any).version}/build/pdf.worker.js`;
     // const loadingTask = PDFJS.getDocument('//raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/examples/learning/helloworld.pdf');
     // loadingTask.promise.then((pdf) => {
@@ -80,6 +84,7 @@ export class PdfViewerComponent implements OnInit, AfterViewInit {
     this.animationStartedPromise.then(() => {
       this.open(this.url);
     });
+    this.isFullScreen = !this.defaultDisplay;
   }
   ngAfterViewInit() {
     this.viewContainer = this.element.nativeElement.querySelector('#viewerContainer');
@@ -140,10 +145,15 @@ export class PdfViewerComponent implements OnInit, AfterViewInit {
     // }
 
     const self = this;
+    const startTime = new Date().getTime();
     // this.pdfViewSetTitleUsingUrl(url);
-    this.pdfLoadingTask = PDFJS.getDocument(url as any);
+    this.pdfLoadingTask = PDFJS.getDocument({
+      url,
+      // rangeChunkSize: 65536
+    });
 
     this.pdfLoadingTask.onProgress = (progressData) => {
+      // console.log(progressData)
       if (progressData.loaded === progressData.total) {
         // self.isSpinning = false;
         console.log('加载完毕。。。');
@@ -152,6 +162,8 @@ export class PdfViewerComponent implements OnInit, AfterViewInit {
 
     return this.pdfLoadingTask.promise.then(
       (pdfDocument) => {
+        // console.log(pdfDocument)
+        // console.log(pdfDocument.getPage(1))
         // Document loaded, specifying document for the viewer.
         self.pdf = pdfDocument;
         self.pdfViewer.setDocument(pdfDocument);
@@ -162,6 +174,7 @@ export class PdfViewerComponent implements OnInit, AfterViewInit {
         // self.loadingBar.hide();
         self.setTitleUsingMetadata(pdfDocument);
         // self.isOpening = false;
+        // console.log((new Date().getTime() - startTime) / 1000)
       },
       (exception) => {
         const message = exception && exception.message;
@@ -275,6 +288,7 @@ export class PdfViewerComponent implements OnInit, AfterViewInit {
         this.pdfHistory = undefined;
       }
     }
+    this.destroy.emit();
 
     return promise;
   }
